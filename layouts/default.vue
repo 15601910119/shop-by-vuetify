@@ -1,117 +1,151 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+  <v-app id="liguoyin-app">
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list dense>
+        <v-list-item link to="/">
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>首页</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link to="/shop">
+          <v-list-item-action>
+            <v-icon>mdi-shopping</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>购物</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
     <v-app-bar
-      :clipped-left="clipped"
-      fixed
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
       app
+      color="blue darken-3"
+      dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <span class="hidden-sm-and-down">蝈蝈商店</span>
+      </v-toolbar-title>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        label="Search"
+        class="hidden-sm-and-down"
+      />
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
+      <v-btn icon>
+        <v-icon>mdi-apps</v-icon>
       </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+      <v-menu
+        bottom
+        left
+        offset-y
+        min-width="200px"
+        transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn icon large v-on="on" v-if="$store.state.userInfo.username">
+            <v-avatar size="32px" item>
+              <v-img
+                :src="$store.state.userInfo.avatar"
+                alt="Vuetify"
+            /></v-avatar>
+          </v-btn>
+          <v-btn icon large v-else link to="/login">
+            登录
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item link to="/login">
+            <v-list-item-title>登录</v-list-item-title>
+          </v-list-item>
+          <v-list-item link>
+            <v-list-item-title>个人中心</v-list-item-title>
+          </v-list-item>
+
+          <v-divider class="mt-2 mb-2"></v-divider>
+          <v-list-item link>
+            <v-list-item-title>退出登录</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-content>
-      <v-container>
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-content>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+    <v-btn bottom color="pink" dark fab fixed right @click="dialog = !dialog">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+    <v-dialog v-model="dialog" width="800px">
+      <v-card>
+        <v-card-title class="grey darken-2">
+          Create contact
+        </v-card-title>
+        <v-container>
+          <v-row class="mx-2">
+            <v-col class="align-center justify-space-between" cols="12">
+              <v-text-field prepend-icon="mdi-mail" placeholder="Name" />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                prepend-icon="mdi-account-card-details-outline"
+                placeholder="请输入你所在公司"
+              />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field placeholder="请输入你的职位" />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-mail"
+                placeholder="请输入你的电子邮箱"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                type="tel"
+                prepend-icon="mdi-phone"
+                placeholder="请输入你的联系电话"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field prepend-icon="mdi-text" placeholder="Notes" />
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-btn text color="primary">More</v-btn>
+          <v-spacer />
+          <v-btn text color="primary" @click="dialog = false">取消</v-btn>
+          <v-btn text @click="dialog = false">发送</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
-    }
+  props: {
+    source: String
+  },
+  data: () => ({
+    dialog: false,
+    drawer: null,
+  }),
+  mounted() {
+    this.$store.dispatch(`QUERY_USER_INFO`);
   }
-}
+};
 </script>
