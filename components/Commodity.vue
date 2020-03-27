@@ -39,6 +39,7 @@
           <div class="subtitle-1 font-weight-bold error--text mr-auto">{{data.price}}</div>
         </div>
         <v-btn
+          @click="onAddCart(data)"
           class="text-none black--text"
           text
         >加入购物车</v-btn>
@@ -50,6 +51,12 @@
 export default {
   props: {
     data: Object
+  },
+  methods: {
+    onAddCart(data) {
+      this.$store.dispatch('add-to-cart-store').then(resp => {
+      })
+    }
   }
 };
 </script>

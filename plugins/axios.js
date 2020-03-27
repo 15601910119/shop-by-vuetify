@@ -3,11 +3,7 @@ const header = {};
 Object.defineProperty(header, `token`, {
   get() {
     if (typeof window === `object` && window) {
-      if (window.__TOKEN__) {
-        return window.__TOKEN__;
-      } else {
-        return window.localStorage.getItem(`token`);
-      }
+      return window.localStorage.getItem(`token`);
     } else {
       return ``;
     }
@@ -46,7 +42,7 @@ export default function({ $axios, redirect, req }, inject) {
   );
 
   if (process.env.NODE_ENV === `development`) {
-    ajax.setBaseURL('http://localhost:3001');
+    ajax.setBaseURL('http://shop.xvivx.online');
   } else {
     ajax.setBaseURL('http://shop.xvivx.online');
   }

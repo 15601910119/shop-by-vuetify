@@ -91,11 +91,10 @@ export default {
       if (this.valid) {
         var { token } = await this.$ajax.post(`/user/login`, this.form);
 
-        window.__TOKEN__ = token;
         window.localStorage && window.localStorage.setItem(`token`, token);
 
         this.$store.dispatch(`QUERY_USER_INFO`);
-        this.$router.push(`/shop`);
+        this.$router.push(`/`);
       }
     }
   }
