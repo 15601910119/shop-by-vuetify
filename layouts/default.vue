@@ -1,10 +1,11 @@
 <template>
   <v-app id="liguoyin-app">
+    <!-- 侧边栏导航，用于移动端 -->
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
         <v-list-item link to="/">
           <v-list-item-action>
-            <v-icon>mdi-home</v-icon>
+            <v-icon>{{ mdiHome }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>首页</v-list-item-title>
@@ -12,7 +13,7 @@
         </v-list-item>
         <v-list-item link to="/shop">
           <v-list-item-action>
-            <v-icon>mdi-shopping</v-icon>
+            <v-icon>{{ mdiShopping }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>购物</v-list-item-title>
@@ -27,7 +28,7 @@
       color="blue darken-3"
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon class="d-md-none" @click.stop="drawer = !drawer" />
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
         <span class="hidden-sm-and-down">蝈蝈商店</span>
       </v-toolbar-title>
@@ -35,8 +36,8 @@
         flat
         solo-inverted
         hide-details
-        prepend-inner-icon="mdi-magnify"
-        label="Search"
+        :prepend-inner-icon="mdiMagnify"
+        label="搜你想搜"
         class="hidden-sm-and-down"
       />
       <v-spacer />
@@ -44,7 +45,7 @@
         <v-icon>mdi-apps</v-icon>
       </v-btn>
       <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
+        <v-icon>{{ mdiBell }}</v-icon>
       </v-btn>
       <v-menu
         bottom
@@ -56,9 +57,7 @@
         <template v-slot:activator="{ on }">
           <v-btn icon large v-on="on" v-if="$store.state.userInfo.username">
             <v-avatar size="32px" item>
-              <v-img
-                :src="$store.state.userInfo.avatar"
-                alt="Vuetify"
+              <v-img :src="$store.state.userInfo.avatar" alt="Vuetify"
             /></v-avatar>
           </v-btn>
           <v-btn icon large v-else link to="/login">
@@ -85,7 +84,7 @@
       <nuxt />
     </v-content>
     <v-btn bottom color="pink" dark fab fixed right @click="dialog = !dialog">
-      <v-icon>mdi-plus</v-icon>
+      <v-icon>{{ mdiPlus }}</v-icon>
     </v-btn>
     <v-dialog v-model="dialog" width="800px">
       <v-card>
@@ -136,16 +135,36 @@
 </template>
 
 <script>
+import { mdiHome, mdiShopping, mdiMagnify, mdiPlus, mdiBell } from '@mdi/js';
 export default {
   props: {
     source: String
   },
   data: () => ({
+    mdiBell,
+    mdiPlus,
+    mdiMagnify,
+    mdiHome,
+    mdiShopping,
     dialog: false,
-    drawer: null,
+    drawer: false
   }),
   mounted() {
     this.$store.dispatch(`QUERY_USER_INFO`);
   }
 };
 </script>
+
+<style lang="scss">
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  transition-delay: 99999s;
+}
+</style>

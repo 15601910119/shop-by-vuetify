@@ -1,25 +1,24 @@
-const header = {};
-
-Object.defineProperty(header, `token`, {
-  get() {
-    if (typeof window === `object` && window) {
-      return window.localStorage.getItem(`token`);
-    } else {
-      return ``;
-    }
+const getToken = function() {
+  if (typeof window === `object` && window) {
+    return window.localStorage.getItem(`token`);
+  } else {
+    return ``;
   }
-});
+};
 
 export default function({ $axios, redirect, req }, inject) {
   const ajax = $axios.create({
     headers: {
-      token: header.token,
       common: {
         Accept: 'text/plain, */*'
       }
     }
   });
 
+  ajax.interceptors.request.use((req) => {
+    req.headers.common['token'] = getToken();
+    return req;
+  });
   ajax.interceptors.response.use(
     (response) => {
       if (response.status === 200) {
@@ -42,7 +41,7 @@ export default function({ $axios, redirect, req }, inject) {
   );
 
   if (process.env.NODE_ENV === `development`) {
-    ajax.setBaseURL('http://shop.xvivx.online');
+    ajax.setBaseURL('http://192.168.0.105:3001');
   } else {
     ajax.setBaseURL('http://shop.xvivx.online');
   }

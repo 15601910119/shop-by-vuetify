@@ -25,7 +25,7 @@
           right
           top
         >
-          <v-icon large>mdi-cart</v-icon>
+          <v-icon large>{{mdiCart}}</v-icon>
         </v-btn>
 
         <v-sheet
@@ -48,9 +48,16 @@
   </v-hover>
 </template>
 <script>
+import { mdiCart } from '@mdi/js';
+
 export default {
   props: {
     data: Object
+  },
+  data() {
+    return {
+      mdiCart
+    }
   },
   methods: {
     onAddCart(data) {

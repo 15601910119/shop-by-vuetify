@@ -3,7 +3,7 @@
     <div slot="title" class="text-center">
       <h1 class="display-1 font-weight-bold mb-2">登录</h1>
       <v-btn fab class="ma-1">
-        <v-icon v-if="!valid">mdi-lock</v-icon>
+        <v-icon v-if="!valid">{{mdiLock}}</v-icon>
         <v-icon v-else class="success--text">mdi-check-bold</v-icon>
       </v-btn>
     </div>
@@ -47,6 +47,8 @@
   </login-sign>
 </template>
 <script>
+import { mdiLock } from '@mdi/js';
+
 import LoginSign from '~/components/LoginSign';
 export default {
   components: {
@@ -71,6 +73,7 @@ export default {
   },
   data() {
     return {
+      mdiLock,
       showPassword: false,
       valid: false,
       form: {},

@@ -116,8 +116,15 @@ export default {
   components: {
     commodity: Commodity
   },
+  head() {
+    return {
+      title: `首页`,
+    }
+  },
   mounted() {
-    this.$ajax.get('banner/get', { status: 'on' }).then(resp => {
+    this.$ajax.get('/banner/get', {
+      params: { status: 'on' }
+    }).then(resp => {
       this.banners = resp.data;
     });
     this.$ajax.get('/commodity/common/discounted').then(resp => {
@@ -127,7 +134,9 @@ export default {
       this.brands = resp.data;
     });
     this.$ajax
-      .get('/commodity/common/query', { pageStart: 0, pageSize: 10 })
+      .get('/commodity/common/query', {
+        params: { pageStart: 0, pageSize: 10 }
+      })
       .then(resp => {
         this.commodities = resp.data;
       });

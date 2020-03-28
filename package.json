@@ -1,5 +1,5 @@
 {
-  "name": "vue-shop",
+  "name": "vue-shop-by-nuxt-vuetify",
   "version": "1.0.0",
   "description": "My groundbreaking Nuxt.js project",
   "author": "李国印",
@@ -12,6 +12,7 @@
     "deploy": "gulp deploy"
   },
   "dependencies": {
+    "@mdi/js": "^5.0.45",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "nuxt": "^2.12.0"
