@@ -1,7 +1,13 @@
 <template>
   <v-app id="liguoyin-app">
     <!-- 侧边栏导航，用于移动端 -->
-    <v-navigation-drawer v-model="drawer" app clipped>
+    <v-navigation-drawer
+      v-model="drawer"
+      bottom
+      fixed
+      :mobile-break-point="500"
+      class="hidden-sm-and-up"
+    >
       <v-list dense>
         <v-list-item link to="/">
           <v-list-item-action>
@@ -22,27 +28,18 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      :clipped-left="$vuetify.breakpoint.lgAndUp"
-      app
-      color="blue darken-3"
-      dark
-    >
-      <v-app-bar-nav-icon class="d-md-none" @click.stop="drawer = !drawer" />
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span class="hidden-sm-and-down">蝈蝈商店</span>
-      </v-toolbar-title>
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        :prepend-inner-icon="mdiMagnify"
-        label="搜你想搜"
-        class="hidden-sm-and-down"
+    <v-app-bar :clipped-left="false" app color="blue darken-3" dark :height="64">
+      <v-app-bar-nav-icon
+        class="hidden-sm-and-up"
+        @click.stop="drawer = !drawer"
       />
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <span>蝈蝈商店</span>
+      </v-toolbar-title>
       <v-spacer />
+
       <v-btn icon>
-        <v-icon>mdi-apps</v-icon>
+        <v-icon>{{mdiApps}}</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>{{ mdiBell }}</v-icon>
@@ -83,71 +80,41 @@
     <v-content>
       <nuxt />
     </v-content>
-    <v-btn bottom color="pink" dark fab fixed right @click="dialog = !dialog">
-      <v-icon>{{ mdiPlus }}</v-icon>
-    </v-btn>
-    <v-dialog v-model="dialog" width="800px">
-      <v-card>
-        <v-card-title class="grey darken-2">
-          Create contact
-        </v-card-title>
-        <v-container>
-          <v-row class="mx-2">
-            <v-col class="align-center justify-space-between" cols="12">
-              <v-text-field prepend-icon="mdi-mail" placeholder="Name" />
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                prepend-icon="mdi-account-card-details-outline"
-                placeholder="请输入你所在公司"
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-text-field placeholder="请输入你的职位" />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                prepend-icon="mdi-mail"
-                placeholder="请输入你的电子邮箱"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                type="tel"
-                prepend-icon="mdi-phone"
-                placeholder="请输入你的联系电话"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field prepend-icon="mdi-text" placeholder="Notes" />
-            </v-col>
-          </v-row>
-        </v-container>
-        <v-card-actions>
-          <v-btn text color="primary">More</v-btn>
-          <v-spacer />
-          <v-btn text color="primary" @click="dialog = false">取消</v-btn>
-          <v-btn text @click="dialog = false">发送</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <v-footer color="primary lighten-1" padless>
+      <v-row justify="center" no-gutters>
+        <v-btn
+          v-for="link in links"
+          :key="link"
+          color="white"
+          text
+          rounded
+          class="my-2"
+        >
+          {{ link }}
+        </v-btn>
+        <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
+          2020 — <strong>为梦想而学</strong>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import { mdiHome, mdiShopping, mdiMagnify, mdiPlus, mdiBell } from '@mdi/js';
+import { mdiHome, mdiShopping, mdiMagnify, mdiPlus, mdiBell, mdiApps } from '@mdi/js';
 export default {
   props: {
     source: String
   },
   data: () => ({
+    mdiApps,
     mdiBell,
     mdiPlus,
     mdiMagnify,
     mdiHome,
     mdiShopping,
-    dialog: false,
-    drawer: false
+    drawer: false,
+    links: [`首页`, `项目介绍`, `联系我`]
   }),
   mounted() {
     this.$store.dispatch(`QUERY_USER_INFO`);

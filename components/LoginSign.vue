@@ -1,8 +1,8 @@
 <template>
-  <v-img src="http://assets.xvivx.online/static/login.jpg">
+  <v-img src="http://assets.xvivx.online/static/login.jpg" class="fill-height">
     <v-responsive class="d-flex" :style="containerStyles">
       <v-container class="d-flex justify-center">
-        <v-card class="pa-3 px-5 py-3" width="400" max-width="100%">
+        <v-card class="pa-3 px-5 py-3" :width="400" max-width="100%">
           <v-flex grow flex-wrap>
             <v-card
               class="text-start mb-n6  elevation-6 primary pa-7"
@@ -30,7 +30,6 @@ export default {
       return {
         'padding-top': `${pt}px`,
         'padding-bottom': `${pb}px`,
-        'min-height': `calc(100vh - ${pt + pb}px)`
       };
     }
   }

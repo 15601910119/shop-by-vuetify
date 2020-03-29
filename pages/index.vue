@@ -1,113 +1,70 @@
 <template>
-  <div>
-    <v-carousel
-      dark
-      height="30vw"
-      interval="3000"
-      show-arrows-on-hover
-    >
+  <section class="home-page">
+    <v-carousel interval="3000" :height="$vuetify.breakpoint.smAndDown ? 300 : 500" :show-arrows="false">
       <v-carousel-item
         :key="i"
-        :src="(item).image"
-        reverse-transition="fade-transition"
-        transition="fade-transition"
-        v-for="(item,i) in banners"
+        :src="item.image"
+        v-for="(item, i) in banners"
       >
-        <v-layout
-          column
-          justify-center
-          style="height: 100%"
-        >
+        <v-layout column justify-center style="height: 100%">
           <v-container>
-            <h1>{{item.title}}</h1>
-            <p>{{item.text}}</p>
+            <h1>{{ item.title }}</h1>
+            <p>{{ item.text }}</p>
           </v-container>
         </v-layout>
       </v-carousel-item>
     </v-carousel>
 
-    <v-container>
-      <v-row>
-        <v-col
-          :key="item.id"
-          cols="4"
-          v-for="item in flow"
-        >
-          <v-card class="d-flex align-center px-8 py-2">
-            <v-img
-              :src="item.src"
-              class="mr-5"
-              contain
-              height="50px"
-              max-width="50px"
-            ></v-img>
-            <v-col ml8>
-              <div class="body-2 text-uppercase mb-2">Dedicated Support</div>
-              <div class="body-1 font-weight-bold mb-3">Live chat on Discord</div>
-              <div class="caption grey--text">*Talk with a Developer</div>
-            </v-col>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <!-- 商品轮播 -->
-    <section class="container">
-      <div class="text-center py-12">
-        <h2 class="font-weight-bold display-2">折扣商品</h2>
+    <!-- 折扣商品 -->
+    <section class="container discounted">
+      <div class="text-center py-6">
+        <h2 class="font-weight-bold display-1">折扣商品</h2>
       </div>
-
-      <v-slide-group
-        class="pa-4"
-        show-arrows
-        v-model="model"
-      >
-        <v-slide-item
+      <v-row class="commodity">
+        <v-col
           :key="commodity.id"
           v-for="commodity in discountCommodity"
+          v-bind="medias"
         >
           <commodity :data="commodity"></commodity>
-        </v-slide-item>
-      </v-slide-group>
+        </v-col>
+      </v-row>
     </section>
 
     <!-- 在线品牌 -->
     <section class="container">
-      <div class="text-center py-12">
-        <h2 class="font-weight-bold display-2">在线品牌</h2>
+      <div class="text-center py-6">
+        <h2 class="font-weight-bold display-1">在线品牌</h2>
       </div>
-      <v-flex class="d-flex">
-        <v-card
+      <v-row class="commodity">
+        <v-col
           :key="brand.id"
-          class="mx-4 my-1"
-          height="200"
           v-for="brand in brands"
-          width="200"
+          v-bind="medias"
         >
-          <v-img
-            :aspect-ratio="1/1"
-            :src="brand.image"
-            contain
-          ></v-img>
-        </v-card>
-      </v-flex>
+          <v-card>
+            <v-img :aspect-ratio="1 / 1" :src="brand.image" contain></v-img>
+          </v-card>
+        </v-col>
+      </v-row>
     </section>
 
     <!-- 所有商品 -->
     <section class="container">
-      <div class="text-center py-12">
-        <h2 class="font-weight-bold display-2">所有商品</h2>
+      <div class="text-center py-6">
+        <h2 class="font-weight-bold display-1">所有商品</h2>
       </div>
-      <v-flex class="d-flex">
-        <div
+      <v-row class="commodity">
+        <v-col
           :key="commodity.id"
           v-for="commodity in commodities"
+          v-bind="medias"
         >
           <commodity :data="commodity"></commodity>
-        </div>
-      </v-flex>
+        </v-col>
+      </v-row>
     </section>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -118,26 +75,21 @@ export default {
   },
   head() {
     return {
-      title: `首页`,
-    }
+      title: `首页`
+    };
   },
   mounted() {
-    this.$ajax.get('/banner/get', {
-      params: { status: 'on' }
-    }).then(resp => {
-      this.banners = resp.data;
-    });
-    this.$ajax.get('/commodity/common/discounted').then(resp => {
+    this.$ajax.get('/commodity/common/discounted').then((resp) => {
       this.discountCommodity = resp.data;
     });
-    this.$ajax.get('/category/common/query').then(resp => {
+    this.$ajax.get('/category/common/query').then((resp) => {
       this.brands = resp.data;
     });
     this.$ajax
       .get('/commodity/common/query', {
         params: { pageStart: 0, pageSize: 10 }
       })
-      .then(resp => {
+      .then((resp) => {
         this.commodities = resp.data;
       });
   },
@@ -147,20 +99,60 @@ export default {
       scope.toggle();
     }
   },
+  async asyncData({ $axios }) {
+    var asyncArr = [
+      // 获取轮播信息
+      $axios.$get(`/banner/get`, {
+        params: { status: `on` }
+      }),
+      // 获取打折商品
+      $axios.$get('/commodity/common/discounted'),
+      // 获取品牌
+      $axios.$get(`/category/common/query`),
+      // 获取商品列表，仅拉前10个数据
+      $axios.$get(`/commodity/common/query`, {
+        params: { pageStart: 0, pageSize: 10 }
+      })
+    ].map((promise) => {
+      return promise.then((resp) => resp.data || []).catch(() => []);
+    });
+
+    var [banners, discounts, brands, commodities] = await Promise.all(asyncArr);
+    return {
+      banners,
+      discountCommodity: discounts,
+      brands,
+      commodities
+    };
+  },
   data() {
     return {
       choosed: {},
-      model: '',
-      discountCommodity: [],
-      brands: [],
-      commodities: [],
-      banners: [],
-      flow: [
-        { id: 1, src: 'https://store.vuetifyjs.com/img/support.f353d1a9.png' },
-        { id: 2, src: 'https://store.vuetifyjs.com/img/support.f353d1a9.png' },
-        { id: 3, src: 'https://store.vuetifyjs.com/img/support.f353d1a9.png' },
-      ]
+      medias: {
+        sm: 4,
+        lg: 3,
+        xl: 2,
+        cols: 6
+      }
     };
   }
 };
 </script>
+
+<style lang="scss">
+.home-page {
+  @media (max-width: 500px) {
+    .commodity {
+      .col-6 {
+        &:nth-child(odd) {
+          padding-left: 0;
+        }
+
+        &:nth-child(even) {
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}
+</style>

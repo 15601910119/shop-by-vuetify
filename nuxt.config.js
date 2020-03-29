@@ -1,5 +1,13 @@
 var colors = require('vuetify/es5/util/colors').default;
-var path = require('path');
+
+var BASE_URL;
+
+if (process.env.NODE_ENV === `development`) {
+  BASE_URL = `http://192.168.0.103:3001/`;
+} else {
+  BASE_URL = `http://shop.xvivx.online/`;
+}
+
 module.exports = {
   // dir: path.resolve(`nuxt`),
   buildDir: 'nuxt-dist',
@@ -8,6 +16,9 @@ module.exports = {
    ** Headers of the page
    */
   head: {
+    htmlAttrs: {
+      lang: `zh-Hans-CN`
+    },
     titleTemplate: `%s - 李国印`,
     title: `李国印`,
     meta: [
@@ -20,7 +31,7 @@ module.exports = {
       }
     ],
     link: [
-      // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: 'http://assets.xvivx.online/favicon.ico' }
     ]
   },
   /*
@@ -34,7 +45,7 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/axios', mode: `client` }],
+  plugins: [{ src: '~/plugins/axios' }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -60,8 +71,16 @@ module.exports = {
       iconfont: 'mdiSvg'
     },
     customVariables: ['~/assets/variables.scss'],
+
     theme: {
       dark: false,
+      options: {
+        minifyTheme: function(css) {
+          return process.env.NODE_ENV === 'production'
+            ? css.replace(/[\r\n|\r|\n]/g, '')
+            : css;
+        }
+      },
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -74,6 +93,10 @@ module.exports = {
         }
       }
     }
+  },
+  axios: {
+    baseURL: BASE_URL,
+    browserBaseURL: BASE_URL
   },
   /*
    ** Build configuration

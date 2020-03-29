@@ -7,6 +7,8 @@ const getToken = function() {
 };
 
 export default function({ $axios, redirect, req }, inject) {
+
+
   const ajax = $axios.create({
     headers: {
       common: {
@@ -39,12 +41,6 @@ export default function({ $axios, redirect, req }, inject) {
       return Promise.reject(error);
     }
   );
-
-  if (process.env.NODE_ENV === `development`) {
-    ajax.setBaseURL('http://192.168.0.105:3001');
-  } else {
-    ajax.setBaseURL('http://shop.xvivx.online');
-  }
 
   // Inject to context as $request
   inject('ajax', ajax);
