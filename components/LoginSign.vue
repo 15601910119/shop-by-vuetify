@@ -1,21 +1,17 @@
 <template>
-  <v-img src="http://assets.xvivx.online/static/login.jpg" class="fill-height">
-    <v-responsive class="d-flex" :style="containerStyles">
-      <v-container class="d-flex justify-center">
-        <v-card class="pa-3 px-5 py-3" :width="400" max-width="100%">
-          <v-flex grow flex-wrap>
-            <v-card
-              class="text-start mb-n6  elevation-6 primary pa-7"
-              style="position: relative; top: -30px"
-            >
-              <slot name="title"></slot>
-            </v-card>
-          </v-flex>
-          <slot></slot>
+  <div :style="containerStyles">
+    <v-container class="d-flex justify-center">
+      <v-card class="pa-3 px-5 py-3" :width="400" max-width="100%">
+        <v-card
+          class="text-start mb-n6  elevation-6 primary pa-7"
+          style="position: relative; top: -30px"
+        >
+          <slot name="title"></slot>
         </v-card>
-      </v-container>
-    </v-responsive>
-  </v-img>
+        <slot></slot>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 <script>
 export default {
@@ -28,8 +24,11 @@ export default {
       var pb = this.$vuetify.application.bottom;
 
       return {
+        'min-height': `100%`,
         'padding-top': `${pt}px`,
         'padding-bottom': `${pb}px`,
+        'background-image': `url(http://assets.xvivx.online/static/login.jpg)`,
+        'background-size': `cover`
       };
     }
   }

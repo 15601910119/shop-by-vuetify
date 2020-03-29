@@ -99,7 +99,7 @@ export default {
       scope.toggle();
     }
   },
-  async asyncData({ $axios }) {
+  async asyncData({ $axios, req }) {
     var asyncArr = [
       // 获取轮播信息
       $axios.$get(`/banner/get`, {

@@ -28,7 +28,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="false" app color="blue darken-3" dark :height="64">
+    <v-app-bar :clipped-left="false" app color="primary" dark :height="64">
       <v-app-bar-nav-icon
         class="hidden-sm-and-up"
         @click.stop="drawer = !drawer"
@@ -39,7 +39,7 @@
       <v-spacer />
 
       <v-btn icon>
-        <v-icon>{{mdiApps}}</v-icon>
+        <v-icon>{{ mdiApps }}</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>{{ mdiBell }}</v-icon>
@@ -80,28 +80,23 @@
     <v-content>
       <nuxt />
     </v-content>
-    <v-footer color="primary lighten-1" padless>
-      <v-row justify="center" no-gutters>
-        <v-btn
-          v-for="link in links"
-          :key="link"
-          color="white"
-          text
-          rounded
-          class="my-2"
-        >
-          {{ link }}
-        </v-btn>
-        <v-col class="primary lighten-2 py-4 text-center white--text" cols="12">
-          2020 — <strong>为梦想而学</strong>
-        </v-col>
-      </v-row>
+    <v-footer padless color="primary" dark>
+      <v-col class="lighten-2 py-4 text-center" cols="12">
+        CopyRight©2020
+      </v-col>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import { mdiHome, mdiShopping, mdiMagnify, mdiPlus, mdiBell, mdiApps } from '@mdi/js';
+import {
+  mdiHome,
+  mdiShopping,
+  mdiMagnify,
+  mdiPlus,
+  mdiBell,
+  mdiApps
+} from '@mdi/js';
 export default {
   props: {
     source: String
