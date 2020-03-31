@@ -1,10 +1,22 @@
+
 export const state = () => ({
   collects: [],
   carts: [],
-  userInfo: {}
+  userInfo: {},
+  toast: {
+    show: false,
+    message: ``,
+    status: ``
+  }
 });
 
 export const mutations = {
+  [`set-toast`](state, payload) {
+    state.toast = {
+      ...state.toast,
+      ...payload
+    };
+  },
   [`clear-cart`](state) {
     state.carts = [];
   },
@@ -73,13 +85,20 @@ export const mutations = {
   }
 };
 export const actions = {
+  async nuxtServerInit({ commit }, { app, req }) {
+    try {
+      var { data } = await app.$ajax.get(`/user/info`, null, true);
+
+      commit(`set-user-info`, data);
+    } catch (_) {}
+  },
   [`clear-cart`](context) {
     return apis.clearCart().then((resp) => {
       context.commit('clear-cart');
     });
   },
   async QUERY_USER_INFO({ commit }) {
-    var { data } = await this.$ajax.get(`/user/info`);
+    var { data } = await this.$ajax.get(`/user/info`, null, true);
 
     commit(`set-user-info`, data);
   },

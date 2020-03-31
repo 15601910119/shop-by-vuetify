@@ -85,6 +85,15 @@
         CopyRight©2020
       </v-col>
     </v-footer>
+    <v-snackbar
+      top
+      color="error"
+      :timeout="3000"
+      :value="$store.state.toast.show"
+      @input="$store.commit(`set-toast`, { show: false })"
+    >
+      {{ $store.state.toast.message }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -98,9 +107,6 @@ import {
   mdiApps
 } from '@mdi/js';
 export default {
-  props: {
-    source: String
-  },
   data: () => ({
     mdiApps,
     mdiBell,
@@ -111,9 +117,6 @@ export default {
     drawer: false,
     links: [`首页`, `项目介绍`, `联系我`]
   }),
-  mounted() {
-    this.$store.dispatch(`QUERY_USER_INFO`);
-  }
 };
 </script>
 

@@ -23,7 +23,10 @@ module.exports = {
     title: `李国印`,
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, user-scalable=no'
+      },
       {
         hid: 'description',
         name: 'description',
@@ -31,7 +34,11 @@ module.exports = {
       }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: 'http://assets.xvivx.online/favicon.ico' }
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: 'http://assets.xvivx.online/favicon.ico'
+      }
     ]
   },
   /*
@@ -45,7 +52,8 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/axios' }],
+  plugins: [{ src: '~/plugins/axios' }, { src: '~/plugins/filters' }],
+
   /*
    ** Nuxt.js dev-modules
    */
@@ -53,10 +61,11 @@ module.exports = {
     [
       '@nuxtjs/vuetify',
       {
-        // defaultAssets: false
+        defaultAssets: false
       }
     ]
   ],
+
   /*
    ** Nuxt.js modules
    */
@@ -98,13 +107,26 @@ module.exports = {
     baseURL: BASE_URL,
     browserBaseURL: BASE_URL
   },
+  server: {
+    port: 5555
+  },
   /*
    ** Build configuration
    */
   build: {
+    extractCSS: true,
+    // todo 放开下面注释会报错，Cannot read property 'props' of undefined
+    // node_modules/vue/dist/vue.runtime.common.prod.js:6:9329
+    // splitChunks: {
+    //   layouts: true,
+    //   pages: true,
+    //   commons: true
+    // },
+    optimizeCSS: true,
     /*
      ** You can extend webpack config here
      */
+    
     extend(config, ctx) {}
     // babel: {
     //   presets({ isServer }) {

@@ -26,10 +26,10 @@
         >
       </div>
       <v-card-actions class="d-flex justify-space-between align-center">
-        <div class="pl-2 d-flex align-center">
+        <div class="pl-3 d-flex align-center">
           <del class="grey--text">{{ data.discount }}</del>
           <div class="subtitle-1 font-weight-bold error--text mr-auto">
-            {{ data.price }}
+            {{ data.price | price }}
           </div>
         </div>
         <v-btn @click="onAddCart(data)" class="text-none" text

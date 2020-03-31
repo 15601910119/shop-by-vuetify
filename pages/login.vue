@@ -3,7 +3,7 @@
     <div slot="title" class="text-center">
       <h1 class="display-1 font-weight-bold mb-2">登录</h1>
       <v-btn fab class="ma-1">
-        <v-icon v-if="!valid">{{mdiLock}}</v-icon>
+        <v-icon v-if="!valid">{{ mdiLock }}</v-icon>
         <v-icon v-else class="success--text">mdi-check-bold</v-icon>
       </v-btn>
     </div>
@@ -48,6 +48,7 @@
 </template>
 <script>
 import { mdiLock } from '@mdi/js';
+import { setCookie } from '@/utils/cookie';
 
 import LoginSign from '~/components/LoginSign';
 export default {
@@ -94,7 +95,7 @@ export default {
       if (this.valid) {
         var { token } = await this.$ajax.post(`/user/login`, this.form);
 
-        window.localStorage && window.localStorage.setItem(`token`, token);
+        document.cookie = setCookie(`token`, token);
 
         this.$store.dispatch(`QUERY_USER_INFO`);
         this.$router.push(`/`);

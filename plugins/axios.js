@@ -1,15 +1,15 @@
-const getToken = function() {
+import { getCookie } from '@/utils/cookie';
+
+const getToken = function(cookies) {
   if (typeof window === `object` && window) {
-    return window.localStorage.getItem(`token`);
+    return getCookie(`token`) || ``;
   } else {
-    return ``;
+    return getCookie(`token`, cookies) || ``;
   }
 };
 
-export default function({ $axios, redirect, req }, inject) {
-
-
-  const ajax = $axios.create({
+export default function({ $axios, store, req }, inject) {
+  const axios = $axios.create({
     headers: {
       common: {
         Accept: 'text/plain, */*'
@@ -17,17 +17,37 @@ export default function({ $axios, redirect, req }, inject) {
     }
   });
 
-  ajax.interceptors.request.use((req) => {
-    req.headers.common['token'] = getToken();
+  axios.interceptors.request.use((req) => {
+    req.headers.common['token'] = getToken(
+      process.server && req.headers.common.cookie
+    );
     return req;
   });
-  ajax.interceptors.response.use(
-    (response) => {
+
+  function ajax(options) {
+    const quiet = options.quiet || false;
+    const status = options.status || `error`;
+
+    delete options.quiet;
+    delete options.status;
+
+    return axios(options).then((response) => {
+      const data = response.data;
+
       if (response.status === 200) {
-        if (response.data.status !== `success`) {
-          return Promise.reject(response.data);
+        if (data.status !== `success`) {
+          // 在非安静模式并且当前没有显示弹出信息时弹出信息提示
+          if (!quiet && !store.state.toast.show) {
+            store.commit(`set-toast`, {
+              show: true,
+              message: data.error || `服务异常`,
+              status: status
+            });
+          }
+
+          return Promise.reject(data);
         } else {
-          return response.data;
+          return data;
         }
       } else {
         return {
@@ -36,11 +56,25 @@ export default function({ $axios, redirect, req }, inject) {
           error: response.message || response.error
         };
       }
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+    });
+  }
+
+  ajax.get = function(url, params, quiet) {
+    return ajax({
+      url: url,
+      params,
+      quiet
+    });
+  };
+
+  ajax.post = function(url, data, quiet) {
+    return ajax({
+      url: url,
+      data,
+      method: `post`,
+      quiet
+    });
+  };
 
   // Inject to context as $request
   inject('ajax', ajax);
