@@ -1,8 +1,8 @@
-
 export const state = () => ({
   collects: [],
   carts: [],
   userInfo: {},
+  isMobile: false,
   toast: {
     show: false,
     message: ``,
@@ -11,6 +11,9 @@ export const state = () => ({
 });
 
 export const mutations = {
+  [`set-mobile`](state, payload) {
+    state.isMobile = payload;
+  },
   [`set-toast`](state, payload) {
     state.toast = {
       ...state.toast,
@@ -86,6 +89,11 @@ export const mutations = {
 };
 export const actions = {
   async nuxtServerInit({ commit }, { app, req }) {
+    var userAgent = req.headers[`user-agent`] || ``;
+    var isMobile = userAgent.indexOf(`Mobile`) > -1;
+
+    commit(`set-mobile`, isMobile);
+
     try {
       var { data } = await app.$ajax.get(`/user/info`, null, true);
 

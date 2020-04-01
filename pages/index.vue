@@ -2,7 +2,7 @@
   <section class="home-page">
     <v-carousel
       interval="3000"
-      :height="$vuetify.breakpoint.smAndDown ? 300 : 500"
+      :height="$store.state.isMobile ? 300 : 500"
       :show-arrows="false"
     >
       <v-carousel-item :key="i" :src="item.image" v-for="(item, i) in banners">

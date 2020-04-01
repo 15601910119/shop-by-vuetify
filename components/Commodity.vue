@@ -11,9 +11,9 @@
         <v-btn
           :style="hover ? { transform: `translate3D(0, -50%, 0)` } : null"
           absolute
-          class="accent transition-swing"
+          class="primary transition-swing"
           fab
-          :large="$vuetify.breakpoint.mdAndUp"
+          :large="!$store.state.isMobile"
           right
           top
         >

@@ -8,7 +8,7 @@ const getToken = function(cookies) {
   }
 };
 
-export default function({ $axios, store, req }, inject) {
+export default function({ $axios, store }, inject) {
   const axios = $axios.create({
     headers: {
       common: {
@@ -21,6 +21,7 @@ export default function({ $axios, store, req }, inject) {
     req.headers.common['token'] = getToken(
       process.server && req.headers.common.cookie
     );
+    
     return req;
   });
 
@@ -76,6 +77,5 @@ export default function({ $axios, store, req }, inject) {
     });
   };
 
-  // Inject to context as $request
   inject('ajax', ajax);
 }

@@ -28,7 +28,13 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar :clipped-left="false" app color="primary" dark :height="64">
+    <v-app-bar
+      :clipped-left="false"
+      app
+      color="primary"
+      dark
+      :height="$store.state.isMobile ? 55 : 64"
+    >
       <v-app-bar-nav-icon
         class="hidden-sm-and-up"
         @click.stop="drawer = !drawer"
@@ -81,7 +87,7 @@
       <nuxt />
     </v-content>
     <v-footer padless color="primary" dark>
-      <v-col class="lighten-2 py-4 text-center" cols="12">
+      <v-col class="lighten-2 py-4 text-center font-weight-bold" cols="12">
         CopyRight©2020
       </v-col>
     </v-footer>
@@ -116,7 +122,7 @@ export default {
     mdiShopping,
     drawer: false,
     links: [`首页`, `项目介绍`, `联系我`]
-  }),
+  })
 };
 </script>
 

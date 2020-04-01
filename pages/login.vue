@@ -1,15 +1,15 @@
 <template>
   <login-sign>
     <div slot="title" class="text-center">
-      <h1 class="display-1 font-weight-bold mb-2">登录</h1>
+      <h1 class="display-1 font-weight-bold mb-2 white--text">登录</h1>
       <v-btn fab class="ma-1">
         <v-icon v-if="!valid">{{ mdiLock }}</v-icon>
-        <v-icon v-else class="success--text">mdi-check-bold</v-icon>
+        <v-icon v-else class="primary--text">{{mdiCheckBold}}</v-icon>
       </v-btn>
     </div>
 
     <v-card-text class="text-center">
-      <div class="success--text body-1 font-weight-light">欢迎回来</div>
+      <div class="primary--text body-1 font-weight-light">欢迎回来</div>
       <v-form v-model="valid" class="mt-10">
         <v-text-field
           class="mb-4"
@@ -47,7 +47,7 @@
   </login-sign>
 </template>
 <script>
-import { mdiLock } from '@mdi/js';
+import { mdiLock, mdiCheckBold } from '@mdi/js';
 import { setCookie } from '@/utils/cookie';
 
 import LoginSign from '~/components/LoginSign';
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       mdiLock,
+      mdiCheckBold,
       showPassword: false,
       valid: false,
       form: {},
@@ -92,6 +93,8 @@ export default {
   },
   methods: {
     async onLogin() {
+      console.log(this.$vuetify.theme.dark = !this.$vuetify.theme.dark);
+      
       if (this.valid) {
         var { token } = await this.$ajax.post(`/user/login`, this.form);
 

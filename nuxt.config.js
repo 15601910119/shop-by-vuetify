@@ -91,8 +91,11 @@ module.exports = {
         }
       },
       themes: {
+        light: {
+          primary: colors.pink,
+        },
         dark: {
-          primary: colors.blue.darken2,
+          primary: colors.indigo,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -127,20 +130,7 @@ module.exports = {
      ** You can extend webpack config here
      */
     
-    extend(config, ctx) {}
-    // babel: {
-    //   presets({ isServer }) {
-    //     if (isServer) {
-    //       const options = {
-    //         modules: 'commonjs',
-    //         targets: {
-    //           node: 'current'
-    //         }
-    //       };
-    //       return [`@nuxt/babel-preset-app`, options];
-    //     }
-    //   }
-    // }
+    extend(config, ctx) {},
   },
   vue: {
     config: {
