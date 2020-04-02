@@ -1,16 +1,7 @@
 <template>
-  <login-sign>
-    <div slot="title" class="text-center">
-      <h1 class="display-1 font-weight-bold mb-2 white--text">登录</h1>
-      <v-btn fab class="ma-1">
-        <v-icon v-if="!valid">{{ mdiLock }}</v-icon>
-        <v-icon v-else class="primary--text">{{mdiCheckBold}}</v-icon>
-      </v-btn>
-    </div>
-
+  <login-sign login>
     <v-card-text class="text-center">
-      <div class="primary--text body-1 font-weight-light">欢迎回来</div>
-      <v-form v-model="valid" class="mt-10">
+      <v-form v-model="valid">
         <v-text-field
           class="mb-4"
           prepend-icon="mdi-face"
@@ -27,45 +18,36 @@
           :type="showPassword ? 'text' : 'password'"
           @click:append="showPassword = !showPassword"
           counter
+          clearable
           prepend-icon="mdi-lock"
           v-model="form.password"
           :rules="formRules.password"
           label="密码"
           :success="!!form.password"
         ></v-text-field>
-        <v-btn
-          text
-          depressed
-          large
-          rounded
-          class="success--text"
-          @click="onLogin"
-          >登录</v-btn
-        >
+        <div>
+          <v-btn text depressed large rounded @click="onGotoSign">注册</v-btn>
+          <v-btn
+            text
+            depressed
+            large
+            rounded
+            class="success--text"
+            @click="onLogin"
+            >登录</v-btn
+          >
+        </div>
       </v-form>
     </v-card-text>
   </login-sign>
 </template>
 <script>
-import { mdiLock, mdiCheckBold } from '@mdi/js';
 import { setCookie } from '@/utils/cookie';
 
 import LoginSign from '~/components/LoginSign';
 export default {
   components: {
     'login-sign': LoginSign
-  },
-  computed: {
-    containerStyles() {
-      var pt = this.$vuetify.application.top;
-      var pb = this.$vuetify.application.bottom;
-
-      return {
-        'padding-top': `${pt}px`,
-        'padding-bottom': `${pb}px`,
-        'min-height': `calc(100vh - ${pt + pb}px)`
-      };
-    }
   },
   head() {
     return {
@@ -74,8 +56,6 @@ export default {
   },
   data() {
     return {
-      mdiLock,
-      mdiCheckBold,
       showPassword: false,
       valid: false,
       form: {},
@@ -92,9 +72,10 @@ export default {
     };
   },
   methods: {
+    onGotoSign() {
+      this.$router.replace(`/sign`);
+    },
     async onLogin() {
-      console.log(this.$vuetify.theme.dark = !this.$vuetify.theme.dark);
-      
       if (this.valid) {
         var { token } = await this.$ajax.post(`/user/login`, this.form);
 

@@ -9,7 +9,8 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "deploy": "gulp deploy"
+    "deploy": "gulp deploy",
+    "gulp": "gulp"
   },
   "dependencies": {
     "@mdi/js": "^5.0.45",
