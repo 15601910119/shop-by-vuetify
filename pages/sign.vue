@@ -132,12 +132,13 @@ export default {
       this.$router.replace(`/login`);
     },
     async onSign() {
-      this.dialog = true;
       if (this.valid) {
         var { token } = await this.$ajax.post(`/user/sign-up`, {
           username: this.form.username,
           password: this.form.password
         });
+
+        this.dialog = true;
       }
     }
   }

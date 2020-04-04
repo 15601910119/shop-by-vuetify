@@ -39,7 +39,12 @@
       <v-row class="commodity">
         <v-col :key="brand.id" v-for="brand in brands" v-bind="medias">
           <v-card>
-            <v-img :aspect-ratio="1 / 1" :src="brand.image" contain></v-img>
+            <v-img
+              :aspect-ratio="1 / 1"
+              :src="brand.image"
+              lazy-src="http://assets.xvivx.online/static/loading.png"
+              contain
+            ></v-img>
           </v-card>
         </v-col>
       </v-row>

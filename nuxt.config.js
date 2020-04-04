@@ -1,12 +1,28 @@
 var colors = require('vuetify/es5/util/colors').default;
-
+// 接口域名
 var BASE_URL;
+// 环境变量
+var isProd = process.env.NODE_ENV === `production`;
 
-if (process.env.NODE_ENV === `development`) {
-  BASE_URL = `http://192.168.0.103:3001/`;
-} else {
+if (isProd) {
   BASE_URL = `http://shop.xvivx.online/`;
+} else {
+  BASE_URL = `http://192.168.0.103:3001/`;
 }
+
+var optimization = {
+  minimize: true,
+  runtimeChunk: `single`,
+  splitChunks: {
+    chunks: 'all',
+    minChunks: 1,
+    minSize: 100 * 1000, // 形成一个新代码块最小的体积
+    maxSize: 0,
+    maxAsyncRequests: 5, // 按需加载时候最大的并行请求数
+    maxInitialRequests: 5, // 最大初始化请求数
+    automaticNameDelimiter: '~' // 打包分割符
+  }
+};
 
 module.exports = {
   // dir: path.resolve(`nuxt`),
@@ -44,11 +60,11 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#0089ff' },
   /*
    ** Global CSS
    */
-  css: [`~/assets/font.css`],
+  css: [`~/assets/font.css`, `~/assets/transition.css`],
   /*
    ** Plugins to load before mounting the App
    */
@@ -57,14 +73,7 @@ module.exports = {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    [
-      '@nuxtjs/vuetify',
-      {
-        defaultAssets: false
-      }
-    ]
-  ],
+  buildModules: [`@nuxtjs/vuetify`],
 
   /*
    ** Nuxt.js modules
@@ -75,27 +84,27 @@ module.exports = {
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
+    treeShake: isProd,
     defaultAssets: false,
     icons: {
       iconfont: 'mdiSvg'
     },
     customVariables: ['~/assets/variables.scss'],
-
     theme: {
-      dark: false,
+      dark: true,
       options: {
         minifyTheme: function(css) {
-          return process.env.NODE_ENV === 'production'
+          return process.env.NODE_ENV === `production`
             ? css.replace(/[\r\n|\r|\n]/g, '')
             : css;
         }
       },
       themes: {
         light: {
-          primary: colors.pink,
+          primary: colors.pink
         },
         dark: {
-          primary: colors.indigo,
+          primary: colors.grey.darken3,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -113,24 +122,19 @@ module.exports = {
   server: {
     port: 5555
   },
+
   /*
    ** Build configuration
    */
   build: {
+    // 优化css
     extractCSS: true,
-    // todo 放开下面注释会报错，Cannot read property 'props' of undefined
-    // node_modules/vue/dist/vue.runtime.common.prod.js:6:9329
-    // splitChunks: {
-    //   layouts: true,
-    //   pages: true,
-    //   commons: true
-    // },
     optimizeCSS: true,
-    /*
-     ** You can extend webpack config here
-     */
-    
-    extend(config, ctx) {},
+    extend(config, ctx) {
+      if (ctx.isClient && !ctx.isDev) {
+        config.optimization = optimization;
+      }
+    }
   },
   vue: {
     config: {

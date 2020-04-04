@@ -11,7 +11,7 @@
       "protocol": "inspector",
       "program": "${workspaceRoot}/node_modules/.bin/nuxt",
       "stopOnEntry": false,
-      "args": ["start"],
+      "args": ["build"],
       "cwd": "${workspaceRoot}",
       "sourceMaps": true,
       "env": {

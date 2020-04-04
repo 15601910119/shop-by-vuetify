@@ -5,6 +5,7 @@
         :aspect-ratio="1 / 1"
         :src="data.image"
         class="grey lighten-4"
+        lazy-src="http://assets.xvivx.online/static/loading.png"
         contain
       ></v-img>
       <div class="px-5 pb-4 pt-8" style="position: relative">

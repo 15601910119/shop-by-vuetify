@@ -1,5 +1,5 @@
 <template>
-  <v-img src="http://assets.xvivx.online/static/login.jpg" min-height="100%">
+  <v-img src="http://assets.xvivx.online/static/login.jpg" min-height="100%" eager>
     <v-responsive
       class="d-flex align-center"
       min-height="100%"
