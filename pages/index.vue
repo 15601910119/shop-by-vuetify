@@ -70,6 +70,7 @@
 
 <script>
 import Commodity from '~/components/Commodity';
+import { home as homeQuery } from '~/graphqls/query';
 export default {
   components: {
     commodity: Commodity
@@ -79,31 +80,17 @@ export default {
       title: `首页`
     };
   },
-  mounted() {},
   async asyncData({ $axios, req, app }) {
-    var asyncArr = [
-      // 获取轮播信息
-      app.$ajax.get(`/banner/get`, { status: `on` }, true),
-      // 获取打折商品
-      app.$ajax.get('/commodity/common/discounted', null, true),
-      // 获取品牌
-      app.$ajax.get(`/category/common/query`, null, true),
-      // 获取商品列表，仅拉前10个数据
-      app.$ajax.get(
-        `/commodity/common/query`,
-        { pageStart: 0, pageSize: 10 },
-        true
-      )
-    ].map((promise) => {
-      return promise.then((resp) => resp.data || []).catch(() => []);
+    var { data } = await app.$ajax.graphql({
+      query: homeQuery,
+      variables: {}
     });
-
-    var [banners, discounts, brands, commodities] = await Promise.all(asyncArr);
+    
     return {
-      banners,
-      discountCommodity: discounts,
-      brands,
-      commodities
+      banners: data.banner.data,
+      discountCommodity: data.commodity.discounteds,
+      brands: data.category.data,
+      commodities: data.commodity.list.data
     };
   },
   data() {

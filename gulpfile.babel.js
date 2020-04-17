@@ -59,7 +59,8 @@ export function zip() {
       `+(nuxt-dist)/**/*`,
       `deploy/+(node_modules)/**/*`,
       `deploy/server.js`,
-      `nuxt.config.js`
+      `nuxt.config.js`,
+      `vuetify.options.js`
     ])
     .pipe(gulpZip(`dist.zip`))
     .pipe(gulp.dest(`deploy`));

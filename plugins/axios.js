@@ -25,7 +25,7 @@ export default function({ $axios, store }, inject) {
     return req;
   });
 
-  function ajax(options) {
+  function ajax(options, isGraphql = false) {
     const quiet = options.quiet || false;
     const status = options.status || `error`;
 
@@ -36,6 +36,10 @@ export default function({ $axios, store }, inject) {
       const data = response.data;
 
       if (response.status === 200) {
+        if (isGraphql) {
+          return data;
+        }
+        
         if (data.status !== `success`) {
           // 在非安静模式并且当前没有显示弹出信息时弹出信息提示
           if (!quiet && !store.state.toast.show) {
@@ -76,6 +80,15 @@ export default function({ $axios, store }, inject) {
       quiet
     });
   };
+
+  ajax.graphql = function (data) {
+    return ajax({
+      url: `/graphql`,
+      data,
+      method: `post`,
+      quiet: true
+    }, true);
+  }
 
   inject('ajax', ajax);
 }
